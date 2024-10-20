@@ -1,6 +1,19 @@
-import { printLine } from './modules/print';
+const video = document.querySelector('video');
 
-console.log('Content script works!');
-console.log('Must reload extension for modifications to take effect.');
+const isYoutube = location.host === 'www.youtube.com';
 
-printLine("Using the 'printLine' function from the Print Module");
+const scroll = () => {
+  const timing = chrome.storage.sync.get('aValue');
+
+  video.currentTime = timing;
+};
+
+const pedalClickHandler = (event) => {
+  if (!isYoutube || !video) return;
+
+  if (event.key === 'MediaTrackPrevious') {
+    scroll();
+  }
+};
+
+window.addEventListener('keydown', pedalClickHandler);

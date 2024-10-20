@@ -1,19 +1,36 @@
-import React, { Component } from 'react';
-import icon from '../../assets/img/icon-128.png';
+import React, { Component, useEffect, useState } from 'react';
+import './MainForm.scss';
 
-class GreetingComponent extends Component {
-  state = {
-    name: 'dev',
-  };
+const MainForm = () => {
+  const [aValue, setAValue] = useState(0);
+  const [midi, setMidi] = useState();
 
-  render() {
-    return (
+  useEffect(() => {
+    chrome.runtime.sendMessage({ contentScriptQuery: 'setAValue', aValue });
+  }, [aValue]);
+
+  useEffect(() => {
+    chrome.storage.sync.get('aValue', function (items) {
+      console.log('items: ', items);
+      if (!chrome.runtime.error) {
+        setAValue(items.aValue);
+      }
+    });
+  }, []);
+
+  return (
+    <div>
       <div>
-        <p>Hello, {this.state.name}!</p>
-        <img src={icon} alt="extension icon" />
+        <label htmlFor="form-a">A Timing:</label>
+        <input
+          id="form-a"
+          type="number"
+          onChange={(e) => setAValue(e.target.value)}
+          value={aValue}
+        ></input>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
-export default GreetingComponent;
+export default MainForm;

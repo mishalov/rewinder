@@ -1,2 +1,7 @@
-console.log('This is the background page.');
-console.log('Put the background scripts here.');
+chrome.runtime.onMessage.addListener(function (request) {
+  const { contentScriptQuery, aValue } = request;
+
+  if (contentScriptQuery === 'setAValue') {
+    chrome.storage.sync.set({ aValue: aValue });
+  }
+});
