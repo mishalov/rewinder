@@ -3,15 +3,13 @@ import './MainForm.scss';
 
 const MainForm = () => {
   const [aValue, setAValue] = useState(0);
-  const [midi, setMidi] = useState();
 
   useEffect(() => {
     chrome.runtime.sendMessage({ contentScriptQuery: 'setAValue', aValue });
   }, [aValue]);
 
   useEffect(() => {
-    chrome.storage.sync.get('aValue', function (items) {
-      console.log('items: ', items);
+    chrome.storage.local.get('aValue', function (items) {
       if (!chrome.runtime.error) {
         setAValue(items.aValue);
       }
